@@ -57,11 +57,19 @@
             </div>
         </div>
     </header>
-      
-    <center>
-        <div id="results" class="results" style="margin-left: 430px;"></div>
-    </center> 
 
-    </div>
+    <main>
+        <center>
+            <div id="results" class="results mt-5" ></div>
+            <center>
+                <span id="pageNumber">1</span>
+                <div id="pagination" style="margin-top: 50px">
+                    <button id="prevPage" class="pagination-button" style="margin-bottom: 100px;" disabled>Prev</button>
+                    <button id="nextPage" class="pagination-button" style="margin-bottom: 100px;">Next</button>
+                </div>
+            </center>
+        </center>
+        <center><button id="randomMoviesButton" class="pagination-button" style="margin-bottom: 100px;">Random Movies</button></center>
+    </main>
 </body>
 </html>

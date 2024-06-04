@@ -148,6 +148,36 @@
   color: white;
 }
 
+.pagination-button {
+  background-color: #3a50f9;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  margin: 0 10px;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.3s;
+}
+
+.pagination-button:hover {
+  background-color: #2c3ebd;
+  transform: scale(1.05);
+}
+
+.pagination-button:disabled {
+  background-color: #444444;
+  cursor: not-allowed;
+}
+
+#pageNumber{
+  color: white;
+}
+
+.pagination-button:active {
+  background-color: #2c3ebd;
+}
+
 .u-section-1 .u-text-2 {
   font-style: normal;
   transform: translateX(0px) translateY(0px) scale(1) rotate(0deg);
