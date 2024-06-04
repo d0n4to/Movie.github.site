@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Description</title>
+    <link rel="stylesheet" href="nicepage.css" media="screen">
+    <link rel="stylesheet" href="Description.css" media="screen">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="icon" href="images/logo.png" type="image/x-icon">
+</head>
+<body>
+    <header class=" u-border-no-bottom u-border-no-left u-border-no-right u-border-no-top u-header u-section-row-container" id="sec-d497" data-animation-name="" data-animation-duration="0" data-animation-delay="0" data-animation-direction="">
+        <div class="u-section-rows">
+            <div class="u-black u-section-row" data-animation-name="" data-animation-duration="0" data-animation-delay="0" data-animation-direction="">
+                <div class="u-clearfix u-sheet u-sheet-1">
+                    <p class="u-custom-font u-font-playfair-display u-text u-text-default u-text-1">Movie Hunter<br></p>
+                    <a href="Pagina-1.html" class="u-border-none u-btn u-button-style u-none u-btn-1">
+                        <span style="margin-left: 400px;" class="u-file-icon u-icon u-text-white u-icon-1"><img src="images/892512-64d21f4e.png" alt=""></span>&nbsp;
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="u-align-center u-black u-clearfix u-section-1" id="sec-db91">
+            <div class="u-clearfix u-sheet u-sheet-1">
+                <div class="custom-expanded data-layout-selected u-clearfix u-layout-wrap u-layout-wrap-1">
+                    <div class="u-layout">
+                        <div class="u-layout-row">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <img id="movie-poster" class="u-image u-image-default u-preserve-proportions u-image-1" src="#" alt="Poster">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="u-align-left u-black u-container-style u-layout-cell u-size-31-lg u-size-31-xl u-size-60-md u-size-60-sm u-size-60-xs u-layout-cell-2" data-animation-name="customAnimationIn" data-animation-duration="1750" data-animation-delay="750">
+                                            <div class="u-container-layout u-container-layout-2" id="resultsFilm">
+                                                <h1 id="movie-title" class="u-text u-text-2">Loading...</h1>
+                                                <h6 id="movie-year" class="u-text u-text-3">Year: N/A</h6>
+                                                <h6 id="movie-rated" class="u-text u-text-4">Rated: N/A</h6>
+                                                <h6 id="movie-genre" class="u-text u-text-5">Genre: N/A</h6>
+                                                <h6 id="movie-runtime" class="u-text u-text-6">Runtime: N/A</h6>
+                                                <h6 id="movie-language" class="u-text u-text-7">Language: N/A</h6>
+                                                <p id="movie-plot" class="u-text u-text-9">Plot:<br>Loading...</p>
+                                                <div id="trailer-container" class="ml-4 mt-1"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Event Listener che si attiva appena la pagina viene caricata
+        document.addEventListener('DOMContentLoaded', async function () {
+            let isMainExecuted = false; // flag per non mandare in loop la ricerca
+
+            // Recupero e visualizzazione dei dettagli del film
+            if (!isMainExecuted) {
+                const tmdbID = getTmdbIDFromURL();
+                if (tmdbID) {
+                    const movieDetails = await fetchMovieDetails(tmdbID);
+                    displayMovieDetails(movieDetails);
+                } else {
+                    console.error('TMDb ID not found in URL.');
+                }
+                isMainExecuted = true;
+            }
+
+            // Funzione per recuperare l'ID del film dall'URL
+            function getTmdbIDFromURL() {
+                const urlParams = new URLSearchParams(window.location.search);
+                return urlParams.get('tmdbID');
+            }
+
+            // Funzione per recuperare i dettagli del film e i video associati dall'API TMDb utilizzando l'ID del film
+            async function fetchMovieDetails(tmdbID) {
+                const tmdbApiKey = '801056529bee61b32d6106f6327cb8f4';
+                const url = `https://api.themoviedb.org/3/movie/${tmdbID}?api_key=${tmdbApiKey}&language=en&append_to_response=videos`;
+
+                try {
+                    const response = await fetch(url);
+                    const data = await response.json();
+                    console.log('Data from TMDb:', data); 
+                    return data;
+                } catch (error) {
+                    console.error('Error fetching movie details:', error);
+                    return null;
+                }
+            }
+
+            // Funzione per visualizzare i dettagli del film e il trailer
+            function displayMovieDetails(movie) {
+                if (movie) {
+                    
+                    const titleElement = document.getElementById('movie-title');
+                    titleElement.textContent = movie.title;
+
+                    const yearElement = document.getElementById('movie-year');
+                    yearElement.textContent = `Year: ${movie.release_date}`;
+
+                    const ratedElement = document.getElementById('movie-rated');
+                    ratedElement.textContent = `Rated: ${movie.vote_average}`;
+
+                    const genreElement = document.getElementById('movie-genre');
+                    genreElement.textContent = `Genre: ${movie.genres.map(genre => genre.name).join(', ')}`;
+
+                    const runtimeElement = document.getElementById('movie-runtime');
+                    runtimeElement.textContent = `Runtime: ${movie.runtime} minutes`;
+
+                    const languageElement = document.getElementById('movie-language');
+                    languageElement.textContent = `Language: ${movie.original_language}`;
+
+                    const plotElement = document.getElementById('movie-plot');
+                    plotElement.textContent = `Plot: ${movie.overview}`;
+
+                    const posterElement = document.getElementById('movie-poster');
+                    posterElement.src = `https://image.tmdb.org/t/p/w500${movie.poster_path}`;
+
+                    // Visualizzazione del trailer
+                    const trailer = movie.videos.results.find(video => video.type === 'Trailer');
+                    if (trailer) {
+                        const trailerUrl = `https://www.youtube.com/embed/${trailer.key}`;
+                        const trailerIframe = document.createElement('iframe');
+                        trailerIframe.src = trailerUrl;
+                        trailerIframe.width = '370';
+                        trailerIframe.height = '200';
+                        trailerIframe.allowFullscreen = true;
+                        trailerIframe.setAttribute('allow', 'accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture');
+                        document.getElementById('trailer-container').appendChild(trailerIframe);
+                    } else {
+                        console.log('Trailer not found.');
+                    }
+
+                } else {
+                    console.error('Movie details not found.');
+                }
+            }
+
+        });
+    </script>
+</body>
+</html>
